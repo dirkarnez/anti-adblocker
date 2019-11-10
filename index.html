@@ -1,0 +1,36 @@
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        .my-ads {
+            background: yellow;
+            color: purple;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        other elements
+    </div>
+    <div class="my-ads">
+        My ads, try to remove it in devtool
+    </div>
+    <div>
+        other elements
+    </div>
+    <button onclick="document.body.innerHTML = ''">Clear Body</button>
+    <script>
+        $(document).on('DOMNodeRemoved', function (e) {
+            var target = $(e.target);
+            if (target.is('.my-ads')) {
+                alert("Please do not remove ads");
+            }
+        });  
+    </script>
+</body>
+</html>
