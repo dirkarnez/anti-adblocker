@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style>
         .my-ads {
             background: yellow;
@@ -25,12 +24,31 @@
     </div>
     <button onclick="document.body.innerHTML = ''">Clear Body</button>
     <script>
-        $(document).on('DOMNodeRemoved', function (e) {
-            var target = $(e.target);
-            if (target.is('.my-ads')) {
-                alert("Please do not remove ads");
-            }
-        });  
+        function antiAdblocker(className, onRemove) {
+            var observer = new MutationObserver(function(mutations) {
+                if (mutations.map(function(mutation) {
+                    return mutation.removedNodes
+                }).some(function(removedNodes){
+                    if (removedNodes.length < 1) {
+                        return false;
+                    }
+
+                    for (var i = 0; i < removedNodes.length; i++) {
+                        var classList = removedNodes[i].classList;
+                        if (classList && classList.contains(className)) {
+                            return true;
+                        }
+                    }
+                })) {
+                    onRemove();
+                }
+            });
+            observer.observe(document.body, { childList: true });
+        }
+
+       antiAdblocker("my-ads", function() {
+           alert("Please do not remove ads");
+       }) 
     </script>
 </body>
 </html>
